@@ -1,11 +1,15 @@
+### Homework reminder
 Node-red uses nodes which send json messages to the next node. For example an inject node that triggers a typescript node that creates a payload that sends a text-to-speech to a soundbar with chromecast
 
  ![workday-homework](workday-homework.png)
 
- msg.payload = {}
- msg.payload = {"type":"TTS","text":"Teitkö kotiläksysi","speed":1,"language":"fi","metadata":{"title":"Pappa talks"}}
- return msg;
+```
+msg.payload = {}
+msg.payload = {"type":"TTS","text":"Teitkö kotiläksysi","speed":1,"language":"fi","metadata":{"title":"Pappa talks"}}
+return msg;
+```
 
+### Wilma Calendar
 This is a node-red flow to trigger a nightlight, 30 minutes before school starts. This flow needs cronplus and huemagic added to the palette. From the hamburger menu on the right top, select "manage palette" and install node-red-contrib-cron-plus and node-red-contrib-huemagic-fork
 
 A cronplus node fetches every week the school calendar from Wilma and saves the ICS calendar file. I use cronplus to take timezones into account.
@@ -23,13 +27,15 @@ Daily a cronplus starts in the morning and a javascript that uses ical.js to cal
 HueMagic is used to connect to my Philips HUE bridge. The HUE bridge has an API and HueMagic 
 Find you bridges using the discovery API https://discovery.meethue.com/ or use mdns philips-hue.local
 
- msg.payload = {}
- msg.payload.on = true;
- msg.payload.color = "red";
- msg.payload.brightness = 100;
- return msg;
+```
+msg.payload = {}
+msg.payload.on = true;
+msg.payload.color = "red";
+msg.payload.brightness = 100;
+return msg;
+```
 
-=== Wilma ICS ===
+### Wilma ICS
 There is no direct API to fetch the calendars from Wilma. But in the web, there is a place to download the calendar as ICS file. There the URL can be copied
 
 The URL is different for each school. The students have a unique number and the login to wilma has a token
@@ -43,7 +49,7 @@ The script child.js script then waits until 30 minutes before school starts and 
 
 the trigger starts on weekdays at 7:30 and runs for a maximum of 10 hours. It does not take corner cases into account when school is on saturday or they do a midnight run.
 
-=== Inspiration ===
+### Inspiration
 Wilma API
 Apparently there is an API and OpenWilma is (was?) an attempt to use it.
 https://github.com/developerfromjokela/wilma_api/blob/master/Wilman_JSON-rajapintav2.pdf
