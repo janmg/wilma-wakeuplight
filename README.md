@@ -12,6 +12,9 @@ return msg;
 ### Wilma Calendar
 This is a node-red flow to trigger a nightlight, 30 minutes before school starts. This flow needs cronplus and huemagic added to the palette. From the hamburger menu on the right top, select "manage palette" and install node-red-contrib-cron-plus and node-red-contrib-huemagic-fork
 
+The flow can be imported into node-red
+https://github.com/janmg/wilma-wakeuplight/blob/main/flows.json
+
 A cronplus node fetches every week the school calendar from Wilma and saves the ICS calendar file. I use cronplus to take timezones into account.
 
 ![weekly-flow](weekly-flow.png)
@@ -45,7 +48,12 @@ https://helsinki.inschool.fi/schedule/export/students/654321/Wilma.ics?token=012
 
 An ICS file can have a repeating schedule, e.g. every tuesday at 9:00 math. To find out what the first lesson of the day is, a script will have to parse all events one at a time and find the earliest starting moment.
 
+The script depends on the ICAL NPM package
+https://github.com/peterbraden/ical.js
+
 The script child.js script then waits until 30 minutes before school starts and triggers the light.
+
+https://github.com/janmg/wilma-wakeuplight/blob/main/child.js
 
 the trigger starts on weekdays at 7:30 and runs for a maximum of 10 hours. It does not take corner cases into account when school is on saturday or they do a midnight run.
 
