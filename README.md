@@ -43,8 +43,6 @@ There is no direct API to fetch the calendars from Wilma. But in the web, there 
 The URL is different for each school. The students have a unique number and the login to wilma has a token
 https://helsinki.inschool.fi/schedule/export/students/654321/Wilma.ics?token=0123456789&p=28&f=56&tstamp=1762955000
 
-https://yvkoulut.inschool.fi/schedule/export/students/654321/Wilma.ics?token=0123456789c&p=28&f=56&tstamp=1762955000
-
 An ICS file can have a repeating schedule, e.g. every tuesday at 9:00 math. To find out what the first lesson of the day is, a script will have to parse all events one at a time and find the earliest starting moment.
 
 The script child.js script then waits until 30 minutes before school starts and triggers the light.
