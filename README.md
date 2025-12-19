@@ -38,6 +38,8 @@ return msg;
 ### Wilma ICS
 There is no direct API to fetch the calendars from Wilma. But in the web, there is a place to download the calendar as ICS file. There the URL can be copied
 
+![wilma-calendar](wilma-calendar.png)
+
 The URL is different for each school. The students have a unique number and the login to wilma has a token
 https://helsinki.inschool.fi/schedule/export/students/654321/Wilma.ics?token=0123456789&p=28&f=56&tstamp=1762955000
 
