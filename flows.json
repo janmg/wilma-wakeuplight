@@ -1,0 +1,357 @@
+[
+    {
+        "id": "b96fc4fb41e9a661",
+        "type": "tab",
+        "label": "Wakeup light",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "95c57a82b0308c72",
+        "type": "http request",
+        "z": "b96fc4fb41e9a661",
+        "name": "fetch calendar",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://koulu.inschool.fi/schedule/export/students/165432/Wilma.ics?token=0123456789&p=28&f=56&tstamp=1762955000",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 340,
+        "y": 60,
+        "wires": [
+            [
+                "9510c4865d893038"
+            ]
+        ]
+    },
+    {
+        "id": "9510c4865d893038",
+        "type": "file",
+        "z": "b96fc4fb41e9a661",
+        "name": "/tmp/child.cs",
+        "filename": "/tmp/child.ics",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 550,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0398751d0d12c39",
+        "type": "cronplus",
+        "z": "b96fc4fb41e9a661",
+        "name": "sunday 22:00",
+        "outputField": "payload",
+        "timeZone": "Europe/Helsinki",
+        "storeName": "",
+        "commandResponseMsgOutput": "output2",
+        "defaultLocation": "",
+        "defaultLocationType": "fixed",
+        "outputs": 2,
+        "options": [
+            {
+                "name": "schedule1",
+                "topic": "topic1",
+                "payloadType": "date",
+                "payload": "",
+                "expressionType": "cron",
+                "expression": "0 22 * * 0",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 120,
+        "y": 60,
+        "wires": [
+            [
+                "95c57a82b0308c72"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "0ba7faeba9a091e8",
+        "type": "inject",
+        "z": "b96fc4fb41e9a661",
+        "name": "on",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "a1863d3bf08d5e08"
+            ]
+        ]
+    },
+    {
+        "id": "2086f6f7f1240ce2",
+        "type": "inject",
+        "z": "b96fc4fb41e9a661",
+        "name": "off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"on\":false}",
+        "payloadType": "json",
+        "x": 350,
+        "y": 340,
+        "wires": [
+            [
+                "409d06d714071205"
+            ]
+        ]
+    },
+    {
+        "id": "ce350f6db99f758d",
+        "type": "exec",
+        "z": "b96fc4fb41e9a661",
+        "command": "node child.js",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "14400",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 330,
+        "y": 280,
+        "wires": [
+            [
+                "a1863d3bf08d5e08"
+            ],
+            [
+                "84b6178fe5a98d6c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "84b6178fe5a98d6c",
+        "type": "debug",
+        "z": "b96fc4fb41e9a661",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "409d06d714071205",
+        "type": "hue-light",
+        "z": "b96fc4fb41e9a661",
+        "name": "Nightlight",
+        "bridge": "b34a0e4454da793a",
+        "lightid": "c78c3235-9726-4bee-9c88-27e38e57261f",
+        "colornamer": true,
+        "skipevents": false,
+        "initevents": false,
+        "x": 1300,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a1863d3bf08d5e08",
+        "type": "function",
+        "z": "b96fc4fb41e9a661",
+        "name": "red",
+        "func": "msg.payload = {}\nmsg.payload.on = true;\nmsg.payload.color = \"red\";\nmsg.payload.brightness = 100;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 260,
+        "wires": [
+            [
+                "409d06d714071205",
+                "4b318330022e9b74"
+            ]
+        ]
+    },
+    {
+        "id": "1dd3dae9a4ef1751",
+        "type": "cronplus",
+        "z": "b96fc4fb41e9a661",
+        "name": "workdays 7:50",
+        "outputField": "payload",
+        "timeZone": "Europe/Helsinki",
+        "storeName": "",
+        "commandResponseMsgOutput": "output2",
+        "defaultLocation": "",
+        "defaultLocationType": "fixed",
+        "outputs": 2,
+        "options": [
+            {
+                "name": "schedule1",
+                "topic": "topic1",
+                "payloadType": "date",
+                "payload": "",
+                "expressionType": "cron",
+                "expression": "50 7 * * 1-5",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "ce350f6db99f758d"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4b318330022e9b74",
+        "type": "delay",
+        "z": "b96fc4fb41e9a661",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 730,
+        "y": 180,
+        "wires": [
+            [
+                "3d214f9a266d2239",
+                "1574e8f68194b36c"
+            ]
+        ]
+    },
+    {
+        "id": "3d214f9a266d2239",
+        "type": "function",
+        "z": "b96fc4fb41e9a661",
+        "name": "bright white",
+        "func": "var moved = msg.payload.motion;\nmsg.payload = {}\nmsg.payload.on = true;\nmsg.payload.color = \"white\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 240,
+        "wires": [
+            [
+                "409d06d714071205"
+            ]
+        ]
+    },
+    {
+        "id": "1574e8f68194b36c",
+        "type": "delay",
+        "z": "b96fc4fb41e9a661",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 940,
+        "y": 180,
+        "wires": [
+            [
+                "9e5d72951d8fd47d"
+            ]
+        ]
+    },
+    {
+        "id": "9e5d72951d8fd47d",
+        "type": "function",
+        "z": "b96fc4fb41e9a661",
+        "name": "off",
+        "func": "msg.payload = {}\nmsg.payload.on = false;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 220,
+        "wires": [
+            [
+                "409d06d714071205"
+            ]
+        ]
+    },
+    {
+        "id": "b34a0e4454da793a",
+        "type": "hue-bridge",
+        "name": "hue fi",
+        "bridge": "philips-hue.local",
+        "key": "",
+        "worker": "10",
+        "autoupdates": true,
+        "disableupdates": false
+    }
+]
