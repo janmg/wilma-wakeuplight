@@ -10,7 +10,7 @@ async function run(waitMinutes) {
 const ical = require('/var/lib/wilma/node-ical');
 const moment = require('moment');
 
-const data = ical.parseFile('/tmp/niiles.ics');
+const data = ical.parseFile('/tmp/child.ics');
 const now = moment().utc();
 const rangeEnd = moment().add(10, 'hours');
 
