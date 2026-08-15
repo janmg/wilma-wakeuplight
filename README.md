@@ -15,7 +15,9 @@ This is a node-red flow to trigger a nightlight, 30 minutes before school starts
 The flow can be imported into node-red
 https://github.com/janmg/wilma-wakeuplight/blob/main/flows.json
 
-A cronplus node fetches every week the school calendar from Wilma and saves the ICS calendar file. I use cronplus to take timezones into account.
+A cronplus node fetches every week the school calendar from Wilma and saves the ICS calendar file. I use cronplus to take timezones into account. The cronplus emits in schedule1 a string with the childs name. 
+
+The child.js runs in an exec node, the childs name is retrieved if "append msg.payload" is set. 
 
 ![weekly-flow](weekly-flow.png)
 
@@ -51,6 +53,9 @@ An ICS file can have a repeating schedule, e.g. every tuesday at 9:00 math. To f
 The script depends on the ICAL NPM package
 https://github.com/peterbraden/ical.js
 
+```
+npm init -y && npm install node-ical moment-timezone moment
+```
 The script child.js script then waits until 30 minutes before school starts and triggers the light.
 
 https://github.com/janmg/wilma-wakeuplight/blob/main/child.js
